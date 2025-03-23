@@ -8,9 +8,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import br.com.project.springjpa2.models.Category;
+import br.com.project.springjpa2.models.City;
 import br.com.project.springjpa2.models.Product;
+import br.com.project.springjpa2.models.State;
 import br.com.project.springjpa2.repositories.CategoryRepository;
+import br.com.project.springjpa2.repositories.CityRepository;
 import br.com.project.springjpa2.repositories.ProductRepository;
+import br.com.project.springjpa2.repositories.StateRepository;
 
 @Configuration
 @Profile("test")
@@ -21,6 +25,12 @@ public class TestConfig implements CommandLineRunner{
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private CityRepository cityRepository;
+
+    @Autowired
+    private StateRepository stateRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -41,6 +51,19 @@ public class TestConfig implements CommandLineRunner{
 
         categoryRepository.saveAll(Arrays.asList(category1, category2));
         productRepository.saveAll(Arrays.asList(product1, product2, product3));
+
+        State state1 = new State(null, "Minas Gerais");
+        State state2 = new State(null, "São Paulo");
+    
+        City city1 = new City(null, "Uberlândia", state1);
+        City city2 = new City(null, "São Paulo", state2);
+        City city3 = new City(null, "Campinas", state2);
+    
+        state1.getCities().addAll(Arrays.asList(city1));
+        state2.getCities().addAll(Arrays.asList(city2, city3));
+
+        stateRepository.saveAll(Arrays.asList(state1, state2));
+        cityRepository.saveAll(Arrays.asList(city1, city2, city3));
     }
 
 
