@@ -1,5 +1,6 @@
 package br.com.project.springjpa2.config;
 
+import java.time.Instant;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,16 +9,23 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import br.com.project.springjpa2.models.Address;
+import br.com.project.springjpa2.models.CardPayment;
 import br.com.project.springjpa2.models.Category;
 import br.com.project.springjpa2.models.City;
 import br.com.project.springjpa2.models.Client;
+import br.com.project.springjpa2.models.Order;
+import br.com.project.springjpa2.models.Payment;
 import br.com.project.springjpa2.models.Product;
 import br.com.project.springjpa2.models.State;
+import br.com.project.springjpa2.models.TicketPayment;
 import br.com.project.springjpa2.models.enums.ClientType;
+import br.com.project.springjpa2.models.enums.PaymentStatus;
 import br.com.project.springjpa2.repositories.AddressRepository;
 import br.com.project.springjpa2.repositories.CategoryRepository;
 import br.com.project.springjpa2.repositories.CityRepository;
 import br.com.project.springjpa2.repositories.ClientRepository;
+import br.com.project.springjpa2.repositories.OrderRepository;
+import br.com.project.springjpa2.repositories.PaymentRepository;
 import br.com.project.springjpa2.repositories.ProductRepository;
 import br.com.project.springjpa2.repositories.StateRepository;
 
@@ -42,6 +50,12 @@ public class TestConfig implements CommandLineRunner{
 
     @Autowired
     private AddressRepository addressRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private PaymentRepository paymentRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -86,7 +100,20 @@ public class TestConfig implements CommandLineRunner{
 
         clientRepository.saveAll(Arrays.asList(client1));
         addressRepository.saveAll(Arrays.asList(address1, address2));
-    }
 
+        Order order1 = new Order(null, Instant.now(), client1, address1);
+        Order order2 = new Order(null, Instant.now(), client1, address2);
+
+        Payment payment1 = new CardPayment(null, PaymentStatus.PAIDOFF, order1, 6);
+        order1.setPayment(payment1);
+        Payment payment2 = new TicketPayment(null, PaymentStatus.WAITING, order2, Instant.now(), null);
+        order1.setPayment(payment1);
+        order2.setPayment(payment2);
+
+        client1.getOrders().addAll(Arrays.asList(order1, order2));
+
+        orderRepository.saveAll(Arrays.asList(order1, order2));
+        paymentRepository.saveAll(Arrays.asList(payment1, payment2));
+    }
 
 }
