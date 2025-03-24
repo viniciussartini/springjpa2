@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import br.com.project.springjpa2.models.enums.ClientType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;
@@ -37,6 +39,7 @@ public class Client implements Serializable{
     @CollectionTable(name = "telephones")
     private Set<String> telephones = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "client")
     private List<Order> orders = new ArrayList<>();
 
@@ -48,10 +51,6 @@ public class Client implements Serializable{
         this.email = email;
         this.idDocument = idDocument;
         this.type = type.getCode();
-    }
-
-    public static long getSerialversionuid() {
-        return serialVersionUID;
     }
 
     public Long getId() {

@@ -14,6 +14,7 @@ import br.com.project.springjpa2.models.Category;
 import br.com.project.springjpa2.models.City;
 import br.com.project.springjpa2.models.Client;
 import br.com.project.springjpa2.models.Order;
+import br.com.project.springjpa2.models.OrderItem;
 import br.com.project.springjpa2.models.Payment;
 import br.com.project.springjpa2.models.Product;
 import br.com.project.springjpa2.models.State;
@@ -24,6 +25,7 @@ import br.com.project.springjpa2.repositories.AddressRepository;
 import br.com.project.springjpa2.repositories.CategoryRepository;
 import br.com.project.springjpa2.repositories.CityRepository;
 import br.com.project.springjpa2.repositories.ClientRepository;
+import br.com.project.springjpa2.repositories.OrderItemRepository;
 import br.com.project.springjpa2.repositories.OrderRepository;
 import br.com.project.springjpa2.repositories.PaymentRepository;
 import br.com.project.springjpa2.repositories.ProductRepository;
@@ -56,6 +58,9 @@ public class TestConfig implements CommandLineRunner{
 
     @Autowired
     private PaymentRepository paymentRepository;
+
+    @Autowired
+    private OrderItemRepository orderItemRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -114,6 +119,19 @@ public class TestConfig implements CommandLineRunner{
 
         orderRepository.saveAll(Arrays.asList(order1, order2));
         paymentRepository.saveAll(Arrays.asList(payment1, payment2));
+
+        OrderItem orderItem1 = new OrderItem(order1, product1, 0.00, 1, 2000.00);
+        OrderItem orderItem2 = new OrderItem(order1, product3, 0.00, 2, 80.00);
+        OrderItem orderItem3 = new OrderItem(order2, product2, 100.00, 1, 800.00);
+
+        order1.getItens().addAll(Arrays.asList(orderItem1, orderItem2));
+        order2.getItens().addAll(Arrays.asList(orderItem3));
+
+        product1.getItens().addAll(Arrays.asList(orderItem1));
+        product2.getItens().addAll(Arrays.asList(orderItem3));
+        product3.getItens().addAll(Arrays.asList(orderItem2));
+
+        orderItemRepository.saveAll(Arrays.asList(orderItem1, orderItem2, orderItem3));
     }
 
 }

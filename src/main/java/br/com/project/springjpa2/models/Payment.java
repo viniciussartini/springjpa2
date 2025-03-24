@@ -2,6 +2,8 @@ package br.com.project.springjpa2.models;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import br.com.project.springjpa2.models.enums.PaymentStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -23,6 +25,7 @@ public abstract class Payment implements Serializable{
     private Long id;
     private Integer paymentStatus;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "pedido_id")
     @MapsId

@@ -2,7 +2,11 @@ package br.com.project.springjpa2.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -32,12 +37,25 @@ public class Product implements Serializable{
     )
     private List<Category> categories = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "id.product")
+    private Set<OrderItem> itens = new HashSet<>();
+
     public Product(){}
 
     public Product(Long id, String name, Double price) {
         this.id = id;
         this.name = name;
         this.price = price;
+    }
+
+    @JsonIgnore
+    public List<Order> getOrders() {
+        List<Order> orderList = new ArrayList<>();
+        for(OrderItem item : itens) {
+            orderList.add(item.getOrder());
+        }
+        return orderList;
     }
 
     public Long getId() {
@@ -66,6 +84,10 @@ public class Product implements Serializable{
 
     public List<Category> getCategories() {
         return categories;
+    }
+
+    public Set<OrderItem> getItens() {
+        return itens;
     }
 
     @Override
