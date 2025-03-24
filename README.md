@@ -100,11 +100,13 @@ classDiagram
 ## Endpoints de teste da API
 
 **Categorias:**
-    `GET /categories` Lista todas as categorias de produto.
-    `GET /categories/{id}` Lista a categoria pelo id informado.
+- `GET /categories` Lista todas as categorias de produto.
+- `GET /categories/{id}` Lista a categoria pelo id informado.
+
 **Clientes:**
-    `GET /clients` Lista todos os clientes.
-    `GET /clients/{id}` Lista o cliente pelo id informado.
+- `GET /clients` Lista todos os clientes.
+- `GET /clients/{id}` Lista o cliente pelo id informado.
+
 **Pedidos:**
-    `GET /orders` Lista todos os pedidos.
-    `GET /orders/{id}` Lista o pedido pelo id informado.
+- `GET /orders` Lista todos os pedidos.
+- `GET /orders/{id}` Lista o pedido pelo id informado.
